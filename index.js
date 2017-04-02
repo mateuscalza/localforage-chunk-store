@@ -18,12 +18,16 @@ function Storage (chunkLength, opts) {
     this.lastChunkIndex = Math.ceil(this.length / this.chunkLength) - 1
   }
 
-  if (!opts.name) opts.name = 'localforage-chunk-store'
+  self.prefix = opts.torrent.infoHash
+
+  if (!opts.name) opts.name = 'persistent-torrents'
   this.store = localforage.createInstance(opts)
 }
 
 Storage.prototype.put = function (index, buf, cb) {
   var self = this
+  var key = self.prefix + '/' + index
+  console.log('put', key)
   if (typeof cb !== 'function') cb = noop
   if (this.closed) return nextTick(cb, new Error('Storage is closed'))
 
@@ -35,15 +39,17 @@ Storage.prototype.put = function (index, buf, cb) {
     return nextTick(cb, new Error('Chunk length must be ' + self.chunkLength))
   }
 
-  self.store.setItem(String(index), buf, cb)
+  self.store.setItem(key, buf, cb)
 }
 
 Storage.prototype.get = function (index, opts, cb) {
   var self = this
+  var key = self.prefix + '/' + index
+  console.log('get', key)
   if (typeof opts === 'function') return self.get(index, null, opts)
   if (this.closed) return nextTick(cb, new Error('Storage is closed'))
 
-  self.store.getItem(String(index), function (err, value) {
+  self.store.getItem(key, function (err, value) {
     if (!value) err = 'got null from localForage'
     if (err) return nextTick(cb, new Error('Chunk not found: ' + err))
 
