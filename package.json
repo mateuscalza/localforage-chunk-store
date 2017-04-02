@@ -1,5 +1,5 @@
 {
-  "name": "localforage-chunk-store",
+  "name": "webtorrent-localforage",
   "description": "localForage chunk store that is abstract-chunk-store compliant",
   "version": "1.0.0",
   "author": {
