@@ -27,7 +27,6 @@ function Storage (chunkLength, opts) {
 Storage.prototype.put = function (index, buf, cb) {
   var self = this
   var key = self.prefix + '/' + index
-  console.log('put', key)
   if (typeof cb !== 'function') cb = noop
   if (this.closed) return nextTick(cb, new Error('Storage is closed'))
 
@@ -45,7 +44,6 @@ Storage.prototype.put = function (index, buf, cb) {
 Storage.prototype.get = function (index, opts, cb) {
   var self = this
   var key = self.prefix + '/' + index
-  console.log('get', key)
   if (typeof opts === 'function') return self.get(index, null, opts)
   if (this.closed) return nextTick(cb, new Error('Storage is closed'))
 
